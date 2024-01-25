@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export const Orders = () => {
 
@@ -6,6 +6,25 @@ export const Orders = () => {
     const [quantity, setQuantity] = useState('');
     const [message, setMessage] = useState('Buy your favorite product');
 
+    
+    useEffect( () => {
+        (async () => {
+            try{
+                if (id) {
+                    const response = await fetch(`http://localhost:8000/products/${id}`);
+                    const content = await response.json();
+                    const price = parseFloat(content.price) * 1.2
+                    setMessage(`Your product price is $${price}`);
+                }
+            } catch(e){
+                setMessage('Buy your favorite product');
+            }
+        })();
+        
+    }, [id]);
+    
+    
+    
     const submit = async e => {
         e.preventDefault();
 
